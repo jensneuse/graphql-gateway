@@ -109,7 +109,7 @@ func startServer() {
 	logger.Info("Listening",
 		zap.String("add", addr),
 	)
-	fmt.Printf("Access Playground on: http://%s%s%s",addr,playgroundURLPrefix,playgroundURL)
+	fmt.Printf("Access Playground on: http://%s%s%s\n",addr,playgroundURLPrefix,playgroundURL)
 	logger.Fatal("failed listening",
 		zap.Error(http.ListenAndServe(addr, mux)),
 	)
