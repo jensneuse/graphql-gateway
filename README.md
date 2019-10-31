@@ -48,6 +48,14 @@ Caching of execution plans will be possible to increase performance.
 This will enable skipping validation and query planning for recurring operations.
 After normalization the input can be hashed and the hash will be used to fill a query plan map / retrieve a cached query plan.
 
+# *any DataSource
+
+*any DataSource can be supported implementing the necessary interfaces.
+Currently supported:
+- Static data (embedded in the schema) 
+- GraphQL APIs
+- HTTP JSON APIs
+
 # Contribute
 
 Please try this tool for your use case and submit issues in case it didn't work for you.
