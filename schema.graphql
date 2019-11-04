@@ -7,20 +7,41 @@ directive @StaticDataSource (
 ) on FIELD_DEFINITION
 
 directive @HttpJsonDataSource (
+    """
+    the host of the origin
+    """
     host: String!
+    """
+    the url of the origin
+    """
     url: String!
+    """
+    the HTTP method the client should use for the request, defaults to GET
+    """
     method: HTTP_METHOD = GET
+    """
+    parameters
+    """
     params: [Parameter]
-    mappings: [Mapping]
 ) on FIELD_DEFINITION
 
 directive @GraphQLDataSource (
+    """
+    the host of the origin
+    """
     host: String!
+    """
+    the url of the origin
+    """
     url: String!
-    field: String
+    """
+    the HTTP method the client should use for the request, defaults to GET
+    """
     method: HTTP_METHOD = POST
+    """
+    parameters
+    """
     params: [Parameter]
-    mappings: [Mapping]
 ) on FIELD_DEFINITION
 
 enum HTTP_METHOD {
@@ -30,10 +51,26 @@ enum HTTP_METHOD {
     DELETE
 }
 
+"""
+Parameter is useful to map variables from various sources into the data source executor.
+"""
 input Parameter {
+    """
+    this is the name by which the execution engine will access the variable
+    """
     name: String!
+    """
+    the kind of the parameter source
+    currently sources: the context, the enclosing object (at execution time), field variables
+    """
     sourceKind: PARAMETER_SOURCE!
+    """
+    name of the parameter on the source
+    """
     sourceName: String!
+    """
+    type name of the variable, used to generate a valid GraphQL query for the upstream
+    """
     variableType: String!
 }
 
