@@ -1,6 +1,6 @@
 # GraphQL Gateway
 
-GraphQL Gateway turns a annotated schema into an executable GraphQL Server.
+GraphQL Gateway turns an annotated schema into an executable GraphQL Server.
 Simply describe your schema and use directives to describe how the execution engine should resolve a field.
 No code needs to be written, no code generation, just configuration and the execution engine does its thing.
 
@@ -9,6 +9,10 @@ You can nest GraphQL data sources into REST data sources into GraphQL data sourc
 Have a look at the schema.graphql file to fully understand the concept.
 
 This is experimental, don't use in production! But please, try it out!
+
+# Docs
+
+https://jens-neuse.gitbook.io/graphql-gateway/
 
 # How to?
 
