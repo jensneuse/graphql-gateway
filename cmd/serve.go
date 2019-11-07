@@ -1,17 +1,18 @@
-
 package cmd
 
 import (
-	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/gobwas/ws"
 	"github.com/jensneuse/graphql-go-tools/pkg/execution"
+	gqlHTTP "github.com/jensneuse/graphql-go-tools/pkg/http"
 	"github.com/jensneuse/graphql-go-tools/pkg/playground"
 	"github.com/spf13/viper"
 	"go.uber.org/zap"
 	"io/ioutil"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/spf13/cobra"
 )
@@ -26,7 +27,7 @@ var serveCmd = &cobra.Command{
 }
 
 var (
-	schemaFile string
+	schemaFile       string
 	loggerConfigFile string
 )
 
@@ -38,8 +39,8 @@ func init() {
 	_ = viper.BindPFlag("loggerConfig", rootCmd.PersistentFlags().Lookup("loggerConfig"))
 }
 
-func logger () *zap.Logger {
-	configData,err := ioutil.ReadFile(loggerConfigFile)
+func logger() *zap.Logger {
+	configData, err := ioutil.ReadFile(loggerConfigFile)
 	if err != nil {
 		panic(err)
 	}
@@ -65,41 +66,30 @@ func startServer() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	handler, err := execution.NewHandler(schemaData,logger)
+	handler, err := execution.NewHandler(schemaData, logger)
 	if err != nil {
 		log.Fatal(err)
 	}
-	mux.HandleFunc(graphqlEndpoint, func(writer http.ResponseWriter, request *http.Request) {
-		buf := bytes.NewBuffer(make([]byte, 0, 4096))
-		err := handler.Handle(request.Body, buf)
+
+	upgrader := &ws.DefaultHTTPUpgrader
+	upgrader.Header = http.Header{}
+	upgrader.Header.Add("Sec-Websocket-Protocol", "graphql-ws")
+	mux.HandleFunc("/time", func(writer http.ResponseWriter, request *http.Request) {
+		_,err := writer.Write(fakeResponse())
 		if err != nil {
-			err := json.NewEncoder(writer).Encode(struct {
-				Errors []struct {
-					Message string `json:"message"`
-				} `json:"errors"`
-			}{
-				Errors: []struct {
-					Message string `json:"message"`
-				}{
-					{
-						Message: err.Error(),
-					},
-				},
-			})
-			if err != nil {
-				logger.Fatal("error encoding",zap.Error(err))
-			}
-			return
+			logger.Error("time_write_err",
+				zap.Error(err),
+			)
 		}
-		writer.Header().Add("Content-Type", "application/json")
-		_, _ = buf.WriteTo(writer)
 	})
+	mux.Handle(graphqlEndpoint, gqlHTTP.NewGraphqlHTTPHandlerFunc(handler,logger,upgrader))
 	playgroundURLPrefix := "/playground"
 	playgroundURL := ""
 	err = playground.ConfigureHandlers(mux, playground.Config{
 		URLPrefix:       playgroundURLPrefix,
 		PlaygroundURL:   playgroundURL,
 		GraphqlEndpoint: graphqlEndpoint,
+		GraphQLSubscriptionEndpoint:graphqlEndpoint,
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -109,8 +99,12 @@ func startServer() {
 	logger.Info("Listening",
 		zap.String("add", addr),
 	)
-	fmt.Printf("Access Playground on: http://%s%s%s\n",addr,playgroundURLPrefix,playgroundURL)
+	fmt.Printf("Access Playground on: http://%s%s%s\n", addr, playgroundURLPrefix, playgroundURL)
 	logger.Fatal("failed listening",
 		zap.Error(http.ListenAndServe(addr, mux)),
 	)
+}
+
+func fakeResponse () []byte {
+	return []byte(`{"week_number":45,"utc_offset":"+01:00","utc_datetime":"2019-11-07T14:02:02.475928+00:00","unixtime":1573135322,"timezone":"Europe/Berlin","raw_offset":3600,"dst_until":null,"dst_offset":0,"dst_from":null,"dst":false,"day_of_year":311,"day_of_week":4,"datetime":"`+ time.Now().String() +`","client_ip":"92.216.144.100","abbreviation":"CET"}`)
 }

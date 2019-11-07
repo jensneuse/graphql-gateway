@@ -39,8 +39,19 @@ directive @GraphQLDataSource (
     """
     method: HTTP_METHOD = POST
     """
+    the field/entry point on the remote schema
+    """
+    field: String
+    """
     parameters
     """
+    params: [Parameter]
+) on FIELD_DEFINITION
+
+directive @HttpPollingStreamDataSource (
+    host: String!
+    url: String!
+    method: HTTP_METHOD = GET
     params: [Parameter]
 ) on FIELD_DEFINITION
 
@@ -87,6 +98,7 @@ input Mapping {
 
 schema {
     query: Query
+    subscription: Subscription
 }
 
 type Foo {
@@ -273,4 +285,28 @@ type Query {
     )
     __schema: __Schema!
     __type(name: String!): __Type
+}
+
+type Subscription {
+    localTime: LocalTime
+        @HttpPollingStreamDataSource(
+            host: "http://localhost:9111"
+            url: "/time"
+        )
+    realTime: RealTime
+        @HttpPollingStreamDataSource(
+            host: "worldtimeapi.org"
+            url: "/api/ip"
+        )
+}
+
+type LocalTime {
+    datetime: String
+    timezone: String
+    abbreviation: String
+}
+
+type RealTime {
+    weekNumber: Int @mapTo(objectField: "week_number")
+    unixTime: Int @mapTo(objectField: "unixtime")
 }
