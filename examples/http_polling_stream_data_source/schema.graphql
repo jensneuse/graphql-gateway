@@ -1,0 +1,182 @@
+"""
+HttpPollingStreamDataSource
+"""
+directive @HttpPollingStreamDataSource (
+    """
+    host is the host name of the data source, e.g. example.com
+    """
+    host: String!
+    """
+    url is the URL from which the data source should poll data from
+    you could use golang templating syntax, e.g.:
+    '/users/{{ .id }}' + parameter named id with value 1 (see below) will render to URL '/users/1'
+    """
+    url: String!
+    "method is the HTTP method the data source should use to fetch data from the upstream"
+    method: HTTP_METHOD = GET
+    "the delay in seconds between each polling"
+    delaySeconds: Int = 5
+    """
+    params are the parameters that should get passed to the data source
+    you could use this function to pass variables from field variables, the context or parent object to the data source
+    thse could be used to 'render' the url dynamically
+    """
+    params: [Parameter]
+) on FIELD_DEFINITION
+
+enum HTTP_METHOD {
+    GET
+    POST
+    UPDATE
+    DELETE
+}
+
+"""
+Parameter is useful to map variables from various sources into the data source executor.
+"""
+input Parameter {
+    """
+    this is the name by which the execution engine will access the variable
+    """
+    name: String!
+    """
+    the kind of the parameter source
+    currently sources: the context, the enclosing object (at execution time), field variables
+    """
+    sourceKind: PARAMETER_SOURCE!
+    """
+    name of the parameter on the source
+    """
+    sourceName: String!
+    """
+    type name of the variable, used to generate a valid GraphQL query for the upstream
+    """
+    variableType: String!
+}
+
+"PARAMETER_SOURCE defines the source of a dyanmic parameter"
+enum PARAMETER_SOURCE {
+    "parameter from the context object which could be pupulated by the http wrapper"
+    CONTEXT_VARIABLE
+    """
+    parameter from the parent object
+    example:
+    consider the following query:
+    {
+        user(id: 1) {
+            userID
+            friends
+        }
+    }
+    Using the PARAMETER_SOURCE 'OBJECT_VARIABLE_ARGUMENT' with sourceName 'userID' returns the userID for user with id 1 at runtime.
+    This way you can dynamically build a query to the friends ressource using the userID at runtime and inject it into the second query.
+    """
+    OBJECT_VARIABLE_ARGUMENT
+    """
+    parameter from the field arguments
+    example:
+    consider the following query:
+    {
+    user(id: 1) {
+            friends
+        }
+    }
+    Using the PARAMETER_SOURCE 'FIELD_ARGUMENTS' with sourceName 'id' returns 1 at runtime.
+    This way you can render the ressource url for /user/:id to /user/1 at runtime dynamically.
+    """
+    FIELD_ARGUMENTS
+}
+
+schema {
+    query: Query
+    subscription: Subscription
+}
+
+type Query {
+    __schema: __Schema!
+    __type(name: String!): __Type
+}
+
+type Subscription {
+    realTime: RealTime
+        @HttpPollingStreamDataSource(
+            host: "worldtimeapi.org"
+            url: "/api/ip"
+        )
+}
+
+type LocalTime {
+    datetime: String
+    timezone: String
+    abbreviation: String
+}
+
+type RealTime {
+    weekNumber: Int @mapTo(objectField: "week_number")
+    unixTime: Int @mapTo(objectField: "unixtime")
+    timezone: String
+    coordinates: [Coordinates]
+        @HttpJsonDataSource(
+            host: "locationiq.com"
+            url: "/v1/search_sandbox.php?format=json&q={{ .name }}&accept-language=en"
+            params: [
+                {
+                    name: "name"
+                    sourceKind: OBJECT_VARIABLE_ARGUMENT
+                    sourceName: "timezone"
+                    variableType: "String"
+                }
+            ]
+        )
+        @ListFilterFirstN(n: 1)
+}
+
+type Coordinates {
+    lat: Float
+    lon: Float
+    weather: Weather
+    @HttpJsonDataSource(
+        host: "https://weather.cit.api.here.com"
+        url: "/weather/1.0/report.json?product=observation&latitude={{ .lat }}&longitude={{ .lon }}&oneobservation=true&app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg"
+        params: [
+            {
+                name: "lat"
+                sourceKind: OBJECT_VARIABLE_ARGUMENT
+                sourceName: "lat"
+                variableType: "Float"
+            },
+            {
+                name: "lon"
+                sourceKind: OBJECT_VARIABLE_ARGUMENT
+                sourceName: "lon"
+                variableType: "Float"
+            }
+        ]
+    )
+}
+
+type Observation {
+    description: String
+    skyDescription: String
+    temperature: Float
+    temperatureDesc: String
+    highTemperature: Float
+    lowTemperature: Float
+}
+
+type Location {
+    country: String
+    state: String
+    city: String
+    observation: [Observation]
+        @ListFilterFirstN(n: 1)
+}
+
+type Observations {
+    location: [Location]
+        @ListFilterFirstN(n: 1)
+}
+
+type Weather {
+    observations: Observations
+}

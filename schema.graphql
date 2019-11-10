@@ -2,6 +2,8 @@ directive @mapTo(
     objectField: String!
 ) on FIELD_DEFINITION
 
+directive @ListFilterFirstN(n: Int!) on FIELD_DEFINITION
+
 directive @StaticDataSource (
     data: String
 ) on FIELD_DEFINITION
@@ -91,11 +93,6 @@ enum PARAMETER_SOURCE {
     FIELD_ARGUMENTS
 }
 
-input Mapping {
-    from: String!
-    to: String!
-}
-
 schema {
     query: Query
     subscription: Subscription
@@ -157,10 +154,12 @@ type Location {
     state: String
     city: String
     observation: [Observation]
+        @ListFilterFirstN(n: 1)
 }
 
 type Observations {
     location: [Location]
+        @ListFilterFirstN(n: 1)
 }
 
 type Weather {
@@ -309,4 +308,19 @@ type LocalTime {
 type RealTime {
     weekNumber: Int @mapTo(objectField: "week_number")
     unixTime: Int @mapTo(objectField: "unixtime")
+    timezone: String
+    coordinates: [Coordinates]
+        @HttpJsonDataSource(
+            host: "locationiq.com"
+            url: "/v1/search_sandbox.php?format=json&q={{ .name }}&accept-language=en"
+            params: [
+                {
+                    name: "name"
+                    sourceKind: OBJECT_VARIABLE_ARGUMENT
+                    sourceName: "timezone"
+                    variableType: "String"
+                }
+            ]
+        )
+        @ListFilterFirstN(n: 1)
 }
