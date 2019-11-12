@@ -10,11 +10,19 @@ Have a look at the schema.graphql file to fully understand the concept.
 
 This is experimental, don't use in production! But please, try it out!
 
+# Run
+
+Run the gateway using docker.
+
+```shell script
+docker run -p 0.0.0.0:9111:9111 jensneuse/graphql-gateway serve
+```
+
 # Docs
 
 https://jens-neuse.gitbook.io/graphql-gateway/
 
-# How to?
+# Develop
 
 1. Install go 1.13. (golang.org)
 2. git clone https://github.com/jensneuse/graphql-gateway.git
