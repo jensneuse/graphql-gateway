@@ -12,6 +12,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -95,11 +96,11 @@ func startServer() {
 		log.Fatal(err)
 		return
 	}
-	addr := "localhost:9111"
+	addr := "0.0.0.0:9111"
 	logger.Info("Listening",
 		zap.String("add", addr),
 	)
-	fmt.Printf("Access Playground on: http://%s%s%s\n", addr, playgroundURLPrefix, playgroundURL)
+	fmt.Printf("Access Playground on: http://%s%s%s\n",prettyAddr(addr) , playgroundURLPrefix, playgroundURL)
 	logger.Fatal("failed listening",
 		zap.Error(http.ListenAndServe(addr, mux)),
 	)
@@ -107,4 +108,8 @@ func startServer() {
 
 func fakeResponse () []byte {
 	return []byte(`{"week_number":45,"utc_offset":"+01:00","utc_datetime":"2019-11-07T14:02:02.475928+00:00","unixtime":1573135322,"timezone":"Europe/Berlin","raw_offset":3600,"dst_until":null,"dst_offset":0,"dst_from":null,"dst":false,"day_of_year":311,"day_of_week":4,"datetime":"`+ time.Now().String() +`","client_ip":"92.216.144.100","abbreviation":"CET"}`)
+}
+
+func prettyAddr(addr string) string {
+	return strings.Replace(addr,"0.0.0.0","localhost",-1)
 }
