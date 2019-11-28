@@ -147,6 +147,10 @@ github.com/jensneuse/graphql-go-tools v1.8.3-0.20191110112223-bcb51850b6cc h1:Pg
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191110112223-bcb51850b6cc/go.mod h1:tdw/5PykMKiGiylfRhyHR73nfe+NGL6nn/inGGQ2XFE=
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191110121827-1f6904cefcf9 h1:+2sb5/kVsRAkR2Wr2p2HamwlhssyPGoL9KTdp6T0QMQ=
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191110121827-1f6904cefcf9/go.mod h1:tdw/5PykMKiGiylfRhyHR73nfe+NGL6nn/inGGQ2XFE=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191112113933-60c5af42e080 h1:tWYXXAkCdfpKot5ClpWRwb5YfWKZp+J58UoRbxpXnYU=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191112113933-60c5af42e080/go.mod h1:tdw/5PykMKiGiylfRhyHR73nfe+NGL6nn/inGGQ2XFE=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191128135457-3a499a5350d5 h1:kdQ4n2afzFsVByWvxsI8EPO1tW3PiSwlBhdneYf5HJo=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191128135457-3a499a5350d5/go.mod h1:tdw/5PykMKiGiylfRhyHR73nfe+NGL6nn/inGGQ2XFE=
 github.com/joho/godotenv v1.3.0 h1:Zjp+RcGpHhGlrMbJzXTrZZPrWj+1vfm90La1wgB6Bhc=
 github.com/joho/godotenv v1.3.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
 github.com/jonboulle/clockwork v0.1.0/go.mod h1:Ii8DK3G1RaLaWxj9trq07+26W01tbo22gdxWY5EU2bo=
