@@ -77,3 +77,18 @@ It's far from being production ready so I'm relying on your input to find missin
 
 1. Based on you input I want to evolve the engine to support as many use cases as possible.
 2. When it feels "production ready" I'll focus on increasing performance because I took a few shortcuts to release this PoC faster (e.g. no parallel fetching, creation of unnecessary garbage collection)
+
+# Comparison
+
+### nautilus gateway
+https://github.com/nautilus/gateway
+
+Nautilus is based around the assumption that all your services are GraphQL Services. It uses the Node interface ([Relay Gloabl Object Identification](https://facebook.github.io/relay/graphql/objectidentification.htm)) to automatically federate between multiple services. This approach is quite similar to the approach Apollo Federation took. So all services have to comply to the Relay Global Object spec and you're ready to go. Nautilus gateway will analyze your services via introspection at startup time and generate the final gateway schema.
+
+In contrast this library goes a complete different approach. The basic assumption is that your public gateway schema should not be an artifact. The gateway schema is the contract between gateway and clients. The gateway doesn't make any assumptions on your services other than complying to some protocol and some spec. It's a lot more manual work at the beginning but this gives a lot of advantages. Because the gateway is the single source of truth regarding the schema you cannot easily break the contract. With federation an upstream service can directly break the contract. Additionally you're not limited to GraphQL upstreams. While GraphQL upstreams are supported it's only a matter of implementing another DataSource interface to support more upstream protocols, e.g. SOAP, MQTT, KAFKA, Redis etc.. On top of that, because the gateway schema is the single source of truth you'll get two additional benefits. First, you can swap DataSources for a given schema without changing the contract. E.g. you could replace a REST User-Service with a GraphQL User-Service without changing the contract between client and gateway. This could help to easily transition from legacy to more modern architectures. Second, because the gateway owns the schema you can apply features like rate limiting, authorization etc. at the gateway level.
+
+To conclude, if you have only GraphQL services complying to the Relay Global Object spec and there are no special requirements like rate limiting or authZ you're best off using nautilus as it's a lot easier to get started.
+
+If you have a heterogenous mesh of services and more specific requirements that would require customizing the schema you'd want to put in the extra effort to configure it all manually in exchange for the benefits described above.
+
+As a sidenote, nautilus relies on the amazing gqlgen library as well as gqlparser from vektah, both amazing tools which are quire mature I think. In comparison I've implemented the GraphQL spec myself ([graphql-go-tools](https://github.com/jensneuse/graphql-go-tools)) for this specific use case. I've paid extra attention to implement features like parsing/lexing/validation/ast-walking in a zero garbage collection fashion which ultimately leads to better performance and more consistent latencies than every available implementation. I won't add benchmarks here because I'm biased but you're invited to prove me wrong.
