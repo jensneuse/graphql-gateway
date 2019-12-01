@@ -6,7 +6,7 @@ require (
 	github.com/buger/jsonparser v0.0.0-20191004114745-ee4c978eae7e // indirect
 	github.com/gobuffalo/envy v1.7.1 // indirect
 	github.com/gobwas/ws v1.0.2
-	github.com/jensneuse/graphql-go-tools v1.8.3-0.20191128135457-3a499a5350d5
+	github.com/jensneuse/graphql-go-tools v1.8.3-0.20191201130149-db8e785954af
 	github.com/magiconair/properties v1.8.1 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/pelletier/go-toml v1.6.0 // indirect
