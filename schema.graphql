@@ -125,6 +125,7 @@ type Headers {
     userAgent: String! @mapTo(objectField: "User-Agent")
     host: String! @mapTo(objectField: "Host")
     acceptEncoding: String @mapTo(objectField: "Accept-Encoding")
+    Authorization: String
 }
 
 type HttpBinGet {
@@ -273,6 +274,12 @@ type Query {
     @HttpJsonDataSource(
         host: "httpbin.org"
         url: "/get"
+        headers: [
+            {
+                key: "Authorization"
+                value: "{{ .request.headers.Authorization }}"
+            }
+        ]
     )
     post(id: Int!): JSONPlaceholderPost
     @HttpJsonDataSource(

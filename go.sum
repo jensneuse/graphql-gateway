@@ -167,6 +167,12 @@ github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202074336-eb0951db4eb7 h1:G6
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202074336-eb0951db4eb7/go.mod h1:tdw/5PykMKiGiylfRhyHR73nfe+NGL6nn/inGGQ2XFE=
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202103943-68e745af8893 h1:wkK2HIJrmIcUPS9N66wK2+/o3eRqHC0CVr2X4mFykLg=
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202103943-68e745af8893/go.mod h1:BuKOrbohnqflSY4wY8tsBG/b5lvXNPe9yhfO72kugr8=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202130603-14f2e2337225 h1:52BsvcQScO669heTaT0O3s/qzp3lN7VBe8SJUwpNfyM=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202130603-14f2e2337225/go.mod h1:BuKOrbohnqflSY4wY8tsBG/b5lvXNPe9yhfO72kugr8=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202150321-019706357c01 h1:sRw8ZrqP+WtNAEXF+su8A+FpOpbnywdC8EH85f96zG0=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202150321-019706357c01/go.mod h1:BuKOrbohnqflSY4wY8tsBG/b5lvXNPe9yhfO72kugr8=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202154600-dd4c38efa6f0 h1:XNZ7U12ImRPP2EGSQRGVga/SkUc6V/hUTkziKqi3iKM=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202154600-dd4c38efa6f0/go.mod h1:BuKOrbohnqflSY4wY8tsBG/b5lvXNPe9yhfO72kugr8=
 github.com/joho/godotenv v1.3.0 h1:Zjp+RcGpHhGlrMbJzXTrZZPrWj+1vfm90La1wgB6Bhc=
 github.com/joho/godotenv v1.3.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
 github.com/jonboulle/clockwork v0.1.0/go.mod h1:Ii8DK3G1RaLaWxj9trq07+26W01tbo22gdxWY5EU2bo=
@@ -258,8 +264,10 @@ github.com/tidwall/sjson v1.0.4/go.mod h1:bURseu1nuBkFpIES5cz6zBtjmYeOQmEESshn7V
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/ugorji/go v1.1.4/go.mod h1:uQMGLiO92mf5W77hV/PUCpI3pbzQx3CRekS0kk+RGrc=
 github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljTbGfSG7qAOspJ7OScBnGdDN/yBr0sguwnwf0=
+github.com/valyala/bytebufferpool v1.0.0 h1:GqA5TC/0021Y/b9FG4Oi9Mr3q7XYx6KllzawFIhcdPw=
 github.com/valyala/bytebufferpool v1.0.0/go.mod h1:6bBcMArwyJ5K/AmCkWv1jt77kVWyCJ6HpOuEn7z0Csc=
 github.com/valyala/fasthttp v1.2.0/go.mod h1:4vX61m6KN+xDduDNwXrhIAVZaZaZiQ1luJk8LWSxF3s=
+github.com/valyala/fasttemplate v1.1.0 h1:RZqt0yGBsps8NGvLSGW804QQqCUYYLsaOjTVHy1Ocw4=
 github.com/valyala/fasttemplate v1.1.0/go.mod h1:UQGH1tvbgY+Nz5t2n7tXsz52dQxojPUpymEIMZ47gx8=
 github.com/valyala/tcplisten v0.0.0-20161114210144-ceec8f93295a/go.mod h1:v3UYOV9WzVtRmSR+PDvWpU/qWl4Wa5LApYYX4ZtKbio=
 github.com/xiang90/probing v0.0.0-20190116061207-43a291ad63a2/go.mod h1:UETIi67q53MR2AWcXfiuqkDkRtnGDLqkBTpCHuJHxtU=
