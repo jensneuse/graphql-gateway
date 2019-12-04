@@ -173,6 +173,10 @@ github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202150321-019706357c01 h1:sR
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202150321-019706357c01/go.mod h1:BuKOrbohnqflSY4wY8tsBG/b5lvXNPe9yhfO72kugr8=
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202154600-dd4c38efa6f0 h1:XNZ7U12ImRPP2EGSQRGVga/SkUc6V/hUTkziKqi3iKM=
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191202154600-dd4c38efa6f0/go.mod h1:BuKOrbohnqflSY4wY8tsBG/b5lvXNPe9yhfO72kugr8=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191204094855-24d24950e6b9 h1:AmOU2TXHpiN5jX9SECy7l0G2pY1UE0vIhdnCXK4nAqg=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191204094855-24d24950e6b9/go.mod h1:na8VNl4dA8Q+Z9yujs570ILvxQlGMkM3PuWWg5B7ZWw=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191204135148-8d622f11a8c3 h1:ws7U9+Fm9Frf04FaVq/fJo3+0v23DQleUIT/C0bkImg=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20191204135148-8d622f11a8c3/go.mod h1:na8VNl4dA8Q+Z9yujs570ILvxQlGMkM3PuWWg5B7ZWw=
 github.com/joho/godotenv v1.3.0 h1:Zjp+RcGpHhGlrMbJzXTrZZPrWj+1vfm90La1wgB6Bhc=
 github.com/joho/godotenv v1.3.0/go.mod h1:7hK45KPybAkOC6peb+G5yklZfMxEjkZhHbwpqxOKXbg=
 github.com/jonboulle/clockwork v0.1.0/go.mod h1:Ii8DK3G1RaLaWxj9trq07+26W01tbo22gdxWY5EU2bo=
@@ -258,8 +262,13 @@ github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXf
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=
 github.com/tidwall/gjson v1.2.1/go.mod h1:c/nTNbUr0E0OrXEhq1pwa8iEgc2DOt4ZZqAt1HtCkPA=
+github.com/tidwall/gjson v1.3.5 h1:2oW9FBNu8qt9jy5URgrzsVx/T/KSn3qn/smJQ0crlDQ=
+github.com/tidwall/gjson v1.3.5/go.mod h1:P256ACg0Mn+j1RXIDXoss50DeIABTYK1PULOJHhxOls=
+github.com/tidwall/match v1.0.1 h1:PnKP62LPNxHKTwvHHZZzdOAOCtsJTjo6dZLCwpKm5xc=
 github.com/tidwall/match v1.0.1/go.mod h1:LujAq0jyVjBy028G1WhWfIzbpQfMO8bBZ6Tyb0+pL9E=
 github.com/tidwall/pretty v0.0.0-20180105212114-65a9db5fad51/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
+github.com/tidwall/pretty v1.0.0 h1:HsD+QiTn7sK6flMKIvNmpqz1qrpP3Ps6jOKIKMooyg4=
+github.com/tidwall/pretty v1.0.0/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/tidwall/sjson v1.0.4/go.mod h1:bURseu1nuBkFpIES5cz6zBtjmYeOQmEESshn7VpF15Y=
 github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5/go.mod h1:ncp9v5uamzpCO7NfCPTXjqaC+bZgJeR0sMTm6dMHP7U=
 github.com/ugorji/go v1.1.4/go.mod h1:uQMGLiO92mf5W77hV/PUCpI3pbzQx3CRekS0kk+RGrc=

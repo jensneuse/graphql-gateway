@@ -1,12 +1,38 @@
-directive @mapTo(
-    objectField: String!
-) on FIELD_DEFINITION
-
 directive @ListFilterFirstN(n: Int!) on FIELD_DEFINITION
 
 directive @StaticDataSource (
     data: String
 ) on FIELD_DEFINITION
+
+"""
+mapping is the directive to define mappings from response objects to GraphQL fields
+"""
+directive @mapping(
+    """
+    mode defines the operating mode of the mapping
+    """
+    mode: MAPPING_MODE! = PATH_SELECTOR
+    """
+    pathSelector is the optional selector String to customize the mappings
+    see https://github.com/tidwall/gjson for more information on what syntax is possible
+    """
+    pathSelector: String
+) on FIELD_DEFINITION
+
+"""
+MAPPING_MODE is the enum to define the different mapper modes
+"""
+enum MAPPING_MODE {
+    """
+    NONE is the mode to skip mappings at all, therefore the parent object will directly get passed to the child
+    """
+    NONE
+    """
+    PATH_SELECTOR is the mode which applies a path selector string on the parent object before passing it to the child
+    see https://github.com/tidwall/gjson for more information on what syntax is possible
+    """
+    PATH_SELECTOR
+}
 
 directive @HttpJsonDataSource (
     """
@@ -122,9 +148,9 @@ type Foo {
 }
 
 type Headers {
-    userAgent: String! @mapTo(objectField: "User-Agent")
-    host: String! @mapTo(objectField: "Host")
-    acceptEncoding: String @mapTo(objectField: "Accept-Encoding")
+    userAgent: String! @mapping(pathSelector: "User-Agent")
+    host: String! @mapping(pathSelector: "Host")
+    acceptEncoding: String @mapping(pathSelector: "Accept-Encoding")
     Authorization: String
 }
 
@@ -150,6 +176,7 @@ type JSONPlaceholderPost {
             }
         ]
     )
+    @mapping(mode: NONE)
 }
 
 type JSONPlaceholderComment {
@@ -208,6 +235,7 @@ type Coordinates {
                 }
             ]
         )
+        @mapping(mode: NONE)
 }
 
 type Country {
@@ -233,6 +261,7 @@ type Country {
             }
         ]
     )
+    @mapping(mode: NONE)
 }
 
 type Continent {
@@ -254,22 +283,27 @@ type Query {
     @StaticDataSource(
         data: "World!"
     )
+    @mapping(mode: NONE)
     staticBoolean: Boolean!
     @StaticDataSource(
         data: "true"
     )
+    @mapping(mode: NONE)
     nonNullInt: Int!
     @StaticDataSource(
         data: "1"
     )
+    @mapping(mode: NONE)
     nullableInt: Int
     @StaticDataSource(
         data: null
     )
+    @mapping(mode: NONE)
     foo: Foo!
     @StaticDataSource(
         data: "{\"bar\": \"baz\"}"
     )
+    @mapping(mode: NONE)
     httpBinGet: HttpBinGet
     @HttpJsonDataSource(
         host: "httpbin.org"
@@ -281,6 +315,7 @@ type Query {
             }
         ]
     )
+    @mapping(mode: NONE)
     post(id: Int!): JSONPlaceholderPost
     @HttpJsonDataSource(
         host: "jsonplaceholder.typicode.com"
@@ -294,6 +329,7 @@ type Query {
             }
         ]
     )
+    @mapping(mode: NONE)
     country(code: String!): Country
     @GraphQLDataSource(
         host: "countries.trevorblades.com"
@@ -318,11 +354,13 @@ type Subscription {
             host: "http://localhost:9111"
             url: "/time"
         )
+        @mapping(mode: NONE)
     realTime: RealTime
         @HttpPollingStreamDataSource(
             host: "worldtimeapi.org"
             url: "/api/ip"
         )
+        @mapping(mode: NONE)
 }
 
 type LocalTime {
@@ -332,8 +370,8 @@ type LocalTime {
 }
 
 type RealTime {
-    weekNumber: Int @mapTo(objectField: "week_number")
-    unixTime: Int @mapTo(objectField: "unixtime")
+    weekNumber: Int @mapping(pathSelector: "week_number")
+    unixTime: Int @mapping(pathSelector: "unixtime")
     timezone: String
     coordinates: [Coordinates]
         @HttpJsonDataSource(
@@ -348,5 +386,6 @@ type RealTime {
                 }
             ]
         )
+        @mapping(mode: NONE)
         @ListFilterFirstN(n: 1)
 }
