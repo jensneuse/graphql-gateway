@@ -4,101 +4,48 @@ directive @StaticDataSource (
     data: String
 ) on FIELD_DEFINITION
 
-"""
-mapping is the directive to define mappings from response objects to GraphQL fields
-"""
+directive @NatsDataSource (
+    addr: String!
+    topic: String!
+) on FIELD_DEFINITION
+
 directive @mapping(
-    """
-    mode defines the operating mode of the mapping
-    """
     mode: MAPPING_MODE! = PATH_SELECTOR
-    """
-    pathSelector is the optional selector String to customize the mappings
-    see https://github.com/tidwall/gjson for more information on what syntax is possible
-    """
     pathSelector: String
 ) on FIELD_DEFINITION
 
-"""
-MAPPING_MODE is the enum to define the different mapper modes
-"""
 enum MAPPING_MODE {
-    """
-    NONE is the mode to skip mappings at all, therefore the parent object will directly get passed to the child
-    """
     NONE
-    """
-    PATH_SELECTOR is the mode which applies a path selector string on the parent object before passing it to the child
-    see https://github.com/tidwall/gjson for more information on what syntax is possible
-    """
     PATH_SELECTOR
 }
 
 directive @HttpJsonDataSource (
-    """
-    the host of the origin
-    """
     host: String!
-    """
-    the url of the origin
-    """
     url: String!
-    """
-    the HTTP method the client should use for the request, defaults to GET
-    """
     method: HTTP_METHOD = GET
-    """
-    parameters
-    """
     params: [Parameter]
+    body: String
+    headers: [Header]
 ) on FIELD_DEFINITION
+
+input Header {
+    key: String!
+    value: String!
+}
 
 directive @GraphQLDataSource (
-    """
-    the host of the origin
-    """
     host: String!
-    """
-    the url of the origin
-    """
     url: String!
-    """
-    the HTTP method the client should use for the request, defaults to GET
-    """
     method: HTTP_METHOD = POST
-    """
-    the field/entry point on the remote schema
-    """
     field: String
-    """
-    parameters
-    """
     params: [Parameter]
 ) on FIELD_DEFINITION
 
-"""
-HttpPollingStreamDataSource
-"""
 directive @HttpPollingStreamDataSource (
-    """
-    host is the host name of the data source, e.g. example.com
-    """
     host: String!
-    """
-    url is the URL from which the data source should poll data from
-    you could use golang templating syntax, e.g.:
-    '/users/{{ .id }}' + parameter named id with value 1 (see below) will render to URL '/users/1'
-    """
     url: String!
-    "method is the HTTP method the data source should use to fetch data from the upstream"
     method: HTTP_METHOD = GET
-    "the delay in seconds between each polling"
     delaySeconds: Int = 5
-    """
-    params are the parameters that should get passed to the data source
-    you could use this function to pass variables from field variables, the context or parent object to the data source
-    thse could be used to 'render' the url dynamically
-    """
     params: [Parameter]
 ) on FIELD_DEFINITION
 
@@ -109,26 +56,10 @@ enum HTTP_METHOD {
     DELETE
 }
 
-"""
-Parameter is useful to map variables from various sources into the data source executor.
-"""
 input Parameter {
-    """
-    this is the name by which the execution engine will access the variable
-    """
     name: String!
-    """
-    the kind of the parameter source
-    currently sources: the context, the enclosing object (at execution time), field variables
-    """
     sourceKind: PARAMETER_SOURCE!
-    """
-    name of the parameter on the source
-    """
     sourceName: String!
-    """
-    type name of the variable, used to generate a valid GraphQL query for the upstream
-    """
     variableType: String!
 }
 
@@ -140,6 +71,7 @@ enum PARAMETER_SOURCE {
 
 schema {
     query: Query
+    mutation: Mutation
     subscription: Subscription
 }
 
@@ -216,26 +148,6 @@ type Weather {
 type Coordinates {
     lat: Float
     lon: Float
-    weather: Weather
-        @HttpJsonDataSource(
-            host: "https://weather.cit.api.here.com"
-            url: "/weather/1.0/report.json?product=observation&latitude={{ .lat }}&longitude={{ .lon }}&oneobservation=true&app_id=DemoAppId01082013GAL&app_code=AJKnXv84fjrb0KIHawS0Tg"
-            params: [
-                {
-                    name: "lat"
-                    sourceKind: OBJECT_VARIABLE_ARGUMENT
-                    sourceName: "lat"
-                    variableType: "Float"
-                },
-                {
-                    name: "lon"
-                    sourceKind: OBJECT_VARIABLE_ARGUMENT
-                    sourceName: "lon"
-                    variableType: "Float"
-                }
-            ]
-        )
-        @mapping(mode: NONE)
 }
 
 type Country {
@@ -319,15 +231,7 @@ type Query {
     post(id: Int!): JSONPlaceholderPost
     @HttpJsonDataSource(
         host: "jsonplaceholder.typicode.com"
-        url: "/posts/{{ .id }}"
-        params: [
-            {
-                name: "id"
-                sourceKind: FIELD_ARGUMENTS
-                sourceName: "id"
-                variableType: "Int!"
-            }
-        ]
+        url: "/posts/{{ .arguments.id }}"
     )
     @mapping(mode: NONE)
     country(code: String!): Country
@@ -355,12 +259,16 @@ type Subscription {
             url: "/time"
         )
         @mapping(mode: NONE)
-    realTime: RealTime
-        @HttpPollingStreamDataSource(
-            host: "worldtimeapi.org"
-            url: "/api/ip"
+    natsTime: NatsTime
+        @NatsDataSource(
+            addr: "nats://0.0.0.0:4222"
+            topic: "time"
         )
         @mapping(mode: NONE)
+}
+
+type NatsTime {
+    time: String! @mapping(pathSelector: "Time")
 }
 
 type LocalTime {
@@ -369,23 +277,27 @@ type LocalTime {
     abbreviation: String
 }
 
-type RealTime {
-    weekNumber: Int @mapping(pathSelector: "week_number")
-    unixTime: Int @mapping(pathSelector: "unixtime")
-    timezone: String
-    coordinates: [Coordinates]
+
+type Mutation {
+    httpBinPost(input: HttpBinPostInput): HttpBinPostResponse
         @HttpJsonDataSource(
-            host: "locationiq.com"
-            url: "/v1/search_sandbox.php?format=json&q={{ .name }}&accept-language=en"
-            params: [
-                {
-                    name: "name"
-                    sourceKind: OBJECT_VARIABLE_ARGUMENT
-                    sourceName: "timezone"
-                    variableType: "String"
-                }
-            ]
+            host: "httpbin.org"
+            url: "/post"
+            method: POST
+            body: "{{ .arguments.input }}"
         )
         @mapping(mode: NONE)
-        @ListFilterFirstN(n: 1)
+}
+
+input HttpBinPostInput {
+    foo: String!
+}
+
+type HttpBinPostResponse {
+    headers: Headers
+    data: HttpBinPostResponseData @mapping(pathSelector: "json")
+}
+
+type HttpBinPostResponseData {
+    foo: String
 }
