@@ -4,9 +4,10 @@ go 1.13
 
 require (
 	github.com/buger/jsonparser v0.0.0-20191004114745-ee4c978eae7e // indirect
+	github.com/eclipse/paho.mqtt.golang v1.2.0
 	github.com/gobuffalo/envy v1.7.1 // indirect
 	github.com/gobwas/ws v1.0.2
-	github.com/jensneuse/graphql-go-tools v1.8.3-0.20191208124515-106fc5632957
+	github.com/jensneuse/graphql-go-tools v1.8.3-0.20191210110105-23bdcaea95d2
 	github.com/magiconair/properties v1.8.1 // indirect
 	github.com/mitchellh/go-homedir v1.1.0
 	github.com/nats-io/nats.go v1.9.1

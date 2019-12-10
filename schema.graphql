@@ -9,6 +9,12 @@ directive @NatsDataSource (
     topic: String!
 ) on FIELD_DEFINITION
 
+directive @MQTTDataSource (
+    brokerAddr: String!
+    clientID: String!
+    topic: String!
+) on FIELD_DEFINITION
+
 directive @mapping(
     mode: MAPPING_MODE! = PATH_SELECTOR
     pathSelector: String
@@ -133,12 +139,12 @@ type Location {
     state: String
     city: String
     observation: [Observation]
-        @ListFilterFirstN(n: 1)
+    @ListFilterFirstN(n: 1)
 }
 
 type Observations {
     location: [Location]
-        @ListFilterFirstN(n: 1)
+    @ListFilterFirstN(n: 1)
 }
 
 type Weather {
@@ -254,20 +260,27 @@ type Query {
 
 type Subscription {
     localTime: LocalTime
-        @HttpPollingStreamDataSource(
-            host: "http://localhost:9111"
-            url: "/time"
-        )
-        @mapping(mode: NONE)
-    natsTime: NatsTime
-        @NatsDataSource(
-            addr: "nats://0.0.0.0:4222"
-            topic: "time"
-        )
-        @mapping(mode: NONE)
+    @HttpPollingStreamDataSource(
+        host: "http://localhost:9111"
+        url: "/time"
+    )
+    @mapping(mode: NONE)
+    natsTime: TimeObject
+    @NatsDataSource(
+        addr: "nats://0.0.0.0:4222"
+        topic: "time"
+    )
+    @mapping(mode: NONE)
+    mqttTime: TimeObject
+    @MQTTDataSource(
+        brokerAddr: "tcp://localhost:1883"
+        clientID: "graphql"
+        topic: "time"
+    )
+    @mapping(mode: NONE)
 }
 
-type NatsTime {
+type TimeObject {
     time: String! @mapping(pathSelector: "Time")
 }
 
@@ -280,13 +293,13 @@ type LocalTime {
 
 type Mutation {
     httpBinPost(input: HttpBinPostInput): HttpBinPostResponse
-        @HttpJsonDataSource(
-            host: "httpbin.org"
-            url: "/post"
-            method: POST
-            body: "{{ .arguments.input }}"
-        )
-        @mapping(mode: NONE)
+    @HttpJsonDataSource(
+        host: "httpbin.org"
+        url: "/post"
+        method: POST
+        body: "{{ .arguments.input }}"
+    )
+    @mapping(mode: NONE)
 }
 
 input HttpBinPostInput {
