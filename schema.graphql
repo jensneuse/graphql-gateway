@@ -9,6 +9,11 @@ directive @NatsDataSource (
     topic: String!
 ) on FIELD_DEFINITION
 
+directive @WasmDataSource (
+    input: String!
+    wasmFile: String!
+) on FIELD_DEFINITION
+
 directive @MQTTDataSource (
     brokerAddr: String!
     clientID: String!
@@ -169,15 +174,7 @@ type Country {
     coordinates: [Coordinates]
     @HttpJsonDataSource(
         host: "locationiq.com"
-        url: "/v1/search_sandbox.php?format=json&q={{ .name }}&accept-language=en"
-        params: [
-            {
-                name: "name"
-                sourceKind: OBJECT_VARIABLE_ARGUMENT
-                sourceName: "name"
-                variableType: "String"
-            }
-        ]
+        url: "/v1/search_sandbox.php?format=json&q={{ .object.name }}&accept-language=en"
     )
     @mapping(mode: NONE)
 }
@@ -254,8 +251,20 @@ type Query {
             }
         ]
     )
+    person(id: String!): Person
+        @WasmDataSource(
+            wasmFile: "./person.wasm"
+            input: "{\"id\":\"{{ .arguments.id }}\"}"
+        )
+        @mapping(mode: NONE)
     __schema: __Schema!
     __type(name: String!): __Type
+}
+
+type Person {
+    id: String!
+    name: String
+    age: Int
 }
 
 type Subscription {
