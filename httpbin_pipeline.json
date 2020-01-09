@@ -1,0 +1,17 @@
+{
+  "steps": [
+    {
+      "kind": "HTTP",
+      "config": {
+        "default_timeout": 10000000000,
+        "default_method": "GET"
+      }
+    },
+    {
+      "kind": "JSON",
+      "config": {
+        "template": "{{ .body.origin }}"
+      }
+    }
+  ]
+}
