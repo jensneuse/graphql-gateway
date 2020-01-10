@@ -252,6 +252,8 @@ github.com/jensneuse/graphql-go-tools v1.8.3-0.20191227153246-79033fb74966 h1:uW
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20191227153246-79033fb74966/go.mod h1:frYIe/W7VDJUil/79plNgRLMiH5pGc9vL8rrWnw2GbI=
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20200109161701-964c808d40a7 h1:iPp34XlB68OpUh3lHnxqLaSJjL33XA38VBrV7Pq/Ju8=
 github.com/jensneuse/graphql-go-tools v1.8.3-0.20200109161701-964c808d40a7/go.mod h1:uM0HeIqb4mv6BHwO99uZ8NrKh7sOrwwOLuvphvDAOek=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20200110085204-33547f7335d4 h1:9UVrfMlf/pCoWCbQ4KIWbadVY12bm2qcwAm5ZHmYoMM=
+github.com/jensneuse/graphql-go-tools v1.8.3-0.20200110085204-33547f7335d4/go.mod h1:uM0HeIqb4mv6BHwO99uZ8NrKh7sOrwwOLuvphvDAOek=
 github.com/jensneuse/pipeline v0.0.0-20200109160550-f4ca9aef3017 h1:Y7IKk+A9QWsLdG0crjrD8RU32fRk0U0a7tEPh8kOoIM=
 github.com/jensneuse/pipeline v0.0.0-20200109160550-f4ca9aef3017/go.mod h1:UsfzaMt+keVOxa007GcCJMFeTHr6voRfBGMQEW7DkdM=
 github.com/joho/godotenv v1.3.0 h1:Zjp+RcGpHhGlrMbJzXTrZZPrWj+1vfm90La1wgB6Bhc=
