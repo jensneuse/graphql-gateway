@@ -64,9 +64,13 @@ After normalization the input can be hashed and the hash will be used to fill a 
 
 *any DataSource can be supported implementing the necessary interfaces.
 Currently supported:
-- Static data (embedded in the schema) 
-- GraphQL APIs
-- HTTP JSON APIs
+- GraphQL (multiple GraphQL services can be combined)
+- static (static embedded data)
+- HTTP JSON
+- HTTP JSON Streaming (uses polling to create a stream)
+- MQTT
+- Nats
+- Webassembly (resolve a Request using WASI compliant modules)
 
 # Contribute
 
