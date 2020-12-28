@@ -24,7 +24,7 @@ https://jens-neuse.gitbook.io/graphql-gateway/
 
 # Develop
 
-1. Install go 1.13. (golang.org)
+1. Install go 1.15 (golang.org)
 2. git clone https://github.com/jensneuse/graphql-gateway.git
 3. cd graphql-gateway
 4. run:

@@ -1,6 +1,6 @@
 module github.com/jensneuse/graphql-gateway
 
-go 1.13
+go 1.15
 
 require (
 	github.com/buger/jsonparser v0.0.0-20191004114745-ee4c978eae7e // indirect
@@ -18,6 +18,7 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.4.0
+	github.com/wasmerio/go-ext-wasm v0.3.1 // indirect
 	go.uber.org/zap v1.13.0
 	golang.org/x/text v0.3.2 // indirect
 )
