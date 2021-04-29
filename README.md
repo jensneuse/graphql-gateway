@@ -1,3 +1,6 @@
+This codebase is **deprecated**!
+Please use https://github.com/jensneuse/graphql-go-tools instead.
+
 # GraphQL Gateway
 
 GraphQL Gateway turns an annotated schema into an executable GraphQL Server.
